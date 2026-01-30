@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 fastapi
 uvicorn
 requests
 cartolafc
-=======
-fastapi
-uvicorn
-requests
-cartolafc
->>>>>>> 8be9301d920511562386ab92c60d405addd85f91
