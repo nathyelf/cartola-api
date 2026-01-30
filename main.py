@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from cartolafc import CartolaFC
+from cartolafc import cartolafc
 import os
 
 app = FastAPI()
