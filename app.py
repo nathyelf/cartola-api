@@ -105,3 +105,9 @@ def liga(slug: str):
     set_cache(slug, dados)
     return dados
 >>>>>>> 8be9301d920511562386ab92c60d405addd85f91
+@app.get("/liga/{slug}")
+def liga_teste(slug: str):
+    return {
+        "status": "endpoint OK",
+        "slug_recebido": slug
+    }
