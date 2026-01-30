@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from cartolafc.api import Api
+from cartolafc import CartolaFC
 import os
 
 app = FastAPI()
@@ -11,9 +11,7 @@ def get_cartola():
     if not email or not senha:
         raise Exception("Variáveis de ambiente CARTOLA_EMAIL ou CARTOLA_SENHA não definidas")
 
-    api = Api()
-    api.login(email, senha)   # ✅ JEITO CERTO AGORA
-    return api
+    return CartolaFC(email=email, password=senha)
 
 @app.get("/")
 def root():
@@ -26,18 +24,18 @@ def liga_teste(slug: str):
 @app.get("/cartola-test")
 def cartola_test():
     try:
-        api = get_cartola()
-        rodada = api.mercado().rodada_atual
-
+        cartola = get_cartola()
+        mercado = cartola.mercado()
         return {
             "login": "ok",
-            "rodada_atual": rodada
+            "rodada_atual": mercado.rodada_atual
         }
     except Exception as e:
         return {
             "login": "erro",
             "detalhe": str(e)
         }
+
 
 
 # 🔹 Endpoint raiz
