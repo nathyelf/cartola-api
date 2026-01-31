@@ -1,69 +1,18 @@
 from fastapi import FastAPI
-from cartolafc import cartolafc
+import json
 import os
 
 app = FastAPI()
 
-def get_cartola():
-    email = os.getenv("CARTOLA_EMAIL")
-    senha = os.getenv("CARTOLA_SENHA")
-
-    if not email or not senha:
-        raise Exception("Variáveis de ambiente CARTOLA_EMAIL ou CARTOLA_SENHA não definidas")
-
-    return CartolaFC(email=email, password=senha)
+JSON_PATH = "dados_liga.json"
 
 @app.get("/")
 def root():
     return {"status": "API ONLINE"}
 
-@app.get("/liga/{slug}")
-def liga_teste(slug: str):
-    return {"ok": True, "slug_recebido": slug}
-
-@app.get("/cartola-test")
-def cartola_test():
-    try:
-        cartola = get_cartola()
-        mercado = cartola.mercado()
-        return {
-            "login": "ok",
-            "rodada_atual": mercado.rodada_atual
-        }
-    except Exception as e:
-        return {
-            "login": "erro",
-            "detalhe": str(e)
-        }
-
-
-
-# 🔹 Endpoint raiz
-@app.get("/")
-def root():
-    return {"status": "API ONLINE"}
-
-# 🔹 Endpoint de teste simples
-@app.get("/liga/{slug}")
-def liga_teste(slug: str):
-    return {
-        "ok": True,
-        "slug_recebido": slug
-    }
-
-# 🔹 Endpoint para testar login no Cartola
-@app.get("/cartola-test")
-def cartola_test():
-    try:
-        api = get_cartola()
-        rodada = api.mercado().rodada_atual
-
-        return {
-            "login": "ok",
-            "rodada_atual": rodada
-        }
-    except Exception as e:
-        return {
-            "login": "erro",
-            "detalhe": str(e)
-        }
+@app.get("/liga")
+def liga():
+    if not os.path.exists(JSON_PATH):
+        return {"erro": "Arquivo JSON não encontrado"}
+    with open(JSON_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
